@@ -23,8 +23,8 @@ from pdf_export import export_travel_plan_to_pdf
 st.set_page_config(
     page_title="AI Travel Planner",
     page_icon="✈️",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="centered",
+    initial_sidebar_state="auto"
 )
 
 # Custom CSS for beautiful styling
@@ -35,18 +35,34 @@ def load_custom_css():
         /* Main styling */
         .main-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2rem;
+            padding: 1.5rem 1rem;
             border-radius: 10px;
             text-align: center;
             color: white;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .main-header h1 {
+            font-size: 1.8rem;
+            margin: 0 0 0.5rem 0;
+            word-wrap: break-word;
+        }
+        
+        .main-header p {
+            font-size: 0.9rem;
+            margin: 0.25rem 0;
+            word-wrap: break-word;
         }
         
         .chat-message {
-            padding: 1rem;
+            padding: 0.75rem;
             border-radius: 10px;
             margin: 0.5rem 0;
-            max-width: 90%;
+            max-width: 95%;
+            word-wrap: break-word;
+            box-sizing: border-box;
         }
         
         .user-message {
@@ -66,9 +82,11 @@ def load_custom_css():
             background: white;
             border: 1px solid #e0e0e0;
             border-radius: 10px;
-            padding: 1.5rem;
+            padding: 1rem;
             margin: 1rem 0;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+            box-sizing: border-box;
         }
         
         .hotel-card {
@@ -115,6 +133,50 @@ def load_custom_css():
             padding: 1rem;
             border-radius: 5px;
             margin: 1rem 0;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 1rem 0.75rem;
+                margin-bottom: 1rem;
+            }
+            
+            .main-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .main-header p {
+                font-size: 0.8rem;
+            }
+            
+            .chat-message {
+                max-width: 98%;
+                padding: 0.5rem;
+            }
+            
+            .day-card {
+                padding: 0.75rem;
+            }
+            
+            .hotel-card, .tip-card {
+                padding: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .main-header p {
+                font-size: 0.75rem;
+            }
+            
+            .chat-message {
+                max-width: 100%;
+                padding: 0.5rem;
+            }
         }
         
         /* Hide streamlit elements */

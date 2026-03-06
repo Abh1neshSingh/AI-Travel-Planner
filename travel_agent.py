@@ -63,8 +63,18 @@ class TravelAgent:
     def _initialize_llm(self):
         """Initialize the language model."""
         try:
-            # Check for API key
+            # Check for API key in multiple sources (local env and Streamlit secrets)
             api_key = os.getenv("MISTRAL_API_KEY")
+            
+            # If not found in environment, try Streamlit secrets (for deployment)
+            if not api_key:
+                try:
+                    import streamlit as st
+                    api_key = st.secrets.get("MISTRAL_API_KEY")
+                    logger.info("Using API key from Streamlit secrets")
+                except Exception as secret_error:
+                    logger.warning(f"Could not access Streamlit secrets: {secret_error}")
+            
             if not api_key or api_key == "your_mistral_api_key_here":
                 logger.warning("MISTRAL_API_KEY not found or not configured in environment variables")
                 # Create a mock agent for demo purposes
@@ -72,7 +82,7 @@ class TravelAgent:
                 return
             
             # Initialize Mistral AI model
-            self.llm = ChatMistralAI(model=self.model_name, temperature=0.7)
+            self.llm = ChatMistralAI(model=self.model_name, temperature=0.7, mistral_api_key=api_key)
             logger.info(f"Initialized {self.model_name} model")
             
         except Exception as e:

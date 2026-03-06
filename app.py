@@ -244,7 +244,14 @@ def create_travel_agent_if_needed():
         with st.spinner("🤖 Initializing AI Travel Agent..."):
             try:
                 st.session_state.travel_agent = create_travel_agent()
-                st.success("✅ AI Travel Agent ready!")
+                
+                # Check if LLM is properly initialized
+                if st.session_state.travel_agent.llm:
+                    st.success("✅ AI Travel Agent ready!")
+                else:
+                    st.warning("⚠️ AI Agent running in fallback mode (no API key)")
+                    st.info("💡 Add MISTRAL_API_KEY to Streamlit secrets for full AI functionality")
+                    
             except Exception as e:
                 st.error(f"❌ Failed to initialize AI Agent: {e}")
                 st.session_state.travel_agent = None

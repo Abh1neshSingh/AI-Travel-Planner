@@ -91,6 +91,16 @@ class TravelRequest(BaseModel):
     travel_style: str = Field(..., description="Travel style preference")
     start_date: Optional[str] = Field(None, description="When do you want to travel?")
     special_requests: Optional[str] = Field(None, description="Any special requests?")
+    
+    def __init__(self, **data):
+        """Initialize with automatic type conversion for duration_days."""
+        # Convert duration_days to int if it's a string
+        if 'duration_days' in data:
+            try:
+                data['duration_days'] = int(data['duration_days'])
+            except (ValueError, TypeError):
+                data['duration_days'] = 3  # Default fallback
+        super().__init__(**data)
 
 
 def format_travel_plan_json(plan: TravelPlan) -> str:
@@ -131,8 +141,13 @@ def validate_travel_request(request: TravelRequest) -> List[str]:
     if not request.destination or len(request.destination.strip()) < 2:
         errors.append("Please provide a valid destination")
     
-    if request.duration_days < 1 or request.duration_days > 30:
-        errors.append("Duration must be between 1 and 30 days")
+    # Convert duration_days to int if it's a string
+    try:
+        duration = int(request.duration_days)
+        if duration < 1 or duration > 30:
+            errors.append("Duration must be between 1 and 30 days")
+    except (ValueError, TypeError):
+        errors.append("Duration must be a valid number")
     
     if not request.budget or request.budget.lower() not in ["budget", "medium", "high"]:
         errors.append("Budget must be: budget, medium, or high")

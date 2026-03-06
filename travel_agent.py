@@ -400,26 +400,29 @@ def create_travel_agent() -> TravelAgent:
 
 # Demo function for testing
 def demo_travel_agent():
-    """Demo function to test the travel agent."""
+    """Test the travel agent functionality."""
     try:
+        print("🤖 Initializing Travel Agent...")
         agent = create_travel_agent()
         
-        # Test with a sample request
-        user_input = "I want to plan a 5-day trip to Paris with a medium budget, focusing on culture and food"
+        # Test request
+        user_input = "I want to plan a 5-day trip to Paris with a medium budget"
+        print(f"📝 Testing: {user_input}")
         
         # Extract details
         details = agent.extract_travel_details(user_input)
-        print("Extracted details:", details)
+        print("✅ Details extracted:", details)
         
         # Create travel request
         request = TravelRequest(**details)
         
         # Generate travel plan
+        print("🗺️ Generating travel plan...")
         plan = agent.generate_travel_plan(request)
-        print("Generated plan:", plan.dict())
+        print("🎉 Plan generated successfully!")
         
     except Exception as e:
-        print(f"Demo failed: {e}")
+        print(f"❌ Demo failed: {e}")
 
 
 if __name__ == "__main__":

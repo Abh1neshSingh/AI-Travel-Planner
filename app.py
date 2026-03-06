@@ -482,13 +482,14 @@ def render_chat_interface():
                     st.rerun()
                     
                 except Exception as e:
-                    # Add error message to chat
-                    error_response = f"Sorry, I encountered an error while processing your request: {str(e)}. "
+                    # Handle errors gracefully
+                    error_response = f"❌ Sorry, I encountered an error: {str(e)}. "
+                    
                     if "API" in str(e).upper() or "key" in str(e).lower():
-                        error_response += "It seems there might be an issue with the AI API. Please check your API key in the .env file. "
+                        error_response += "Please check your API key in the .env file. "
                         error_response += "You can still use the sidebar to generate travel plans!"
                     else:
-                        error_response += "Please try again or use the sidebar to set your travel preferences."
+                        error_response += "Please try again or use the sidebar to set your preferences."
                     
                     st.session_state.chat_history.append({
                         'role': 'assistant',

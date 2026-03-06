@@ -248,24 +248,31 @@ Focus on practical, actionable advice that will enhance the travel experience.
 
 # Map links prompt
 MAP_LINKS_PROMPT = PromptTemplate.from_template("""
-Generate useful Google Maps links for a traveler visiting:
+Generate useful Google Maps links for a traveler visiting {destination}:
 
 Destination: {destination}
 Duration: {duration_days} days
 
-Return in JSON format:
+Create REAL, WORKING Google Maps URLs for this specific destination. Use actual Google Maps URL patterns:
 
+1. City overview: https://www.google.com/maps/place/{destination} (replace spaces with +)
+2. Tourist attractions: https://www.google.com/maps/search/tourist+attractions+{destination}
+3. Hotels: https://www.google.com/maps/search/hotels+{destination}
+4. Restaurants: https://www.google.com/maps/search/restaurants+{destination}
+5. Airport: https://www.google.com/maps/search/airport+{destination}
+
+Return in JSON format:
 {{
     "map_links": [
-        "City overview map link",
-        "Public transportation map link", 
-        "Tourist attractions area map link",
-        "Airport to city center route link",
-        "Popular neighborhoods map link"
+        "https://www.google.com/maps/place/[actual-destination-search]",
+        "https://www.google.com/maps/search/tourist+attractions+[destination]", 
+        "https://www.google.com/maps/search/hotels+[destination]",
+        "https://www.google.com/maps/search/restaurants+[destination]",
+        "https://www.google.com/maps/search/airport+[destination]"
     ]
 }}
 
-Create actual working Google Maps URLs that would be helpful for navigation.
+IMPORTANT: Create ACTUAL working URLs with the real destination name, not placeholder IDs!
 """)
 
 

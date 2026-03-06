@@ -6,7 +6,8 @@ This module handles all AI interactions and travel plan generation.
 import os
 import json
 import logging
-from typing import Dict, Any, Optional
+import re
+from typing import Dict, Any, Optional, List
 from dotenv import load_dotenv
 
 # LangChain imports
@@ -361,9 +362,26 @@ class TravelAgent:
             "special_requests": "not_specified"
         }
     
+    def _generate_real_map_links(self, destination: str) -> List[str]:
+        """Generate real, working Google Maps links for a destination."""
+        
+        # Clean destination name for URL (replace spaces with +)
+        clean_destination = re.sub(r'\s+', '+', destination.strip())
+        
+        return [
+            f"https://www.google.com/maps/place/{clean_destination}",
+            f"https://www.google.com/maps/search/tourist+attractions+{clean_destination}",
+            f"https://www.google.com/maps/search/hotels+{clean_destination}",
+            f"https://www.google.com/maps/search/restaurants+{clean_destination}",
+            f"https://www.google.com/maps/search/airport+{clean_destination}"
+        ]
+    
     def _get_fallback_travel_plan(self, travel_request: TravelRequest) -> TravelPlan:
         """Get a basic fallback travel plan when AI generation fails."""
         logger.warning("Using fallback travel plan")
+        
+        # Generate real map links
+        real_map_links = self._generate_real_map_links(travel_request.destination)
         
         return TravelPlan(
             destination=travel_request.destination,
@@ -389,7 +407,7 @@ class TravelAgent:
             ],
             packing_checklist=["Passport", "Comfortable clothes", "Camera", "Medications"],
             travel_tips=["Learn basic local phrases", "Keep emergency contacts handy"],
-            map_links=["Google Maps for city navigation"],
+            map_links=real_map_links,  # Use real map links instead of placeholder
             total_estimated_cost="$200-500"
         )
 
